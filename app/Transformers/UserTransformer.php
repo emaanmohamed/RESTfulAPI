@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use App\User;
 use League\Fractal\TransformerAbstract;
 
 class UserTransformer extends TransformerAbstract
@@ -19,9 +20,25 @@ class UserTransformer extends TransformerAbstract
             'email' => (string)$user->email,
             'isVerified' => (int)$user->verified,
             'isAdmin' => ($user->admin === 'true'),
-            'creationDate' => $user->created_at,
-            'lastChange' => $user->created_at,
+            'creationDate' => (string)$user->created_at,
+            'lastChange' => (string)$user->created_at,
             'deletedDate' => isset($buyer->deleted_at ) ? (string) $user ->deleted_at : null,
         ];
+    }
+
+    public static function originalAttribute($index)
+    {
+        $attributes = [
+            'identifier' => 'id',
+            'name' => 'name',
+            'email' => 'email',
+            'isVerified' => 'verified',
+            'isAdmin' => 'admin',
+            'creationDate' => 'created_at',
+            'lastChange' => 'updated_at',
+            'deletedDate' => 'deleted_at',
+        ];
+
+        return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 }

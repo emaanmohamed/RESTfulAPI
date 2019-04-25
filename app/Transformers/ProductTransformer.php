@@ -22,9 +22,23 @@ class ProductTransformer extends TransformerAbstract
             'situation' => (string)$product->status,
             'picture' => url("img/{$product->image}"),
             'seller' => (int)$product->seller_id,
-            'creationDate' => $product->created_at,
-            'lastChange' => $product->updated_at,
+            'creationDate' => (string)$product->created_at,
+            'lastChange' => (string)$product->updated_at,
             'deletedDate' => isset($product->deleted_at ) ? (string) $product->deleted_at : null,
         ];
+    }
+
+    public static function originalAttribute($index)
+    {
+        $attributes = [
+            'identifier' => 'id',
+            'title' => 'name',
+            'details' => 'description',
+            'creationDate' => 'created_at',
+            'lastChange' => 'updated_at',
+            'deletedDate' => 'deleted_at',
+        ];
+
+        return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 }
